@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Java问题收集 - blog</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="blog"><meta name="msapplication-TileImage" content="/images/avatar.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="blog"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="StringJava 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?JEP 254： 紧凑字符串 (openjdk.org) 我们建议更改类的内部表示 从 UTF-16 数组到数组加上编码标志字段。 新类将存储编码为 ISO-8859-1&amp;#x2F;Latin-1（每个字符一个字节），或 UTF-16（每个字符两个字节） 字符）"><meta property="og:type" content="blog"><meta property="og:title" content="Java问题收集"><meta property="og:url" content="http://dawnchannel.tech/2023/02/20/JavaProblem/"><meta property="og:site_name" content="blog"><meta property="og:description" content="StringJava 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?JEP 254： 紧凑字符串 (openjdk.org) 我们建议更改类的内部表示 从 UTF-16 数组到数组加上编码标志字段。 新类将存储编码为 ISO-8859-1&amp;#x2F;Latin-1（每个字符一个字节），或 UTF-16（每个字符两个字节） 字符）"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="http://dawnchannel.tech/img/og_image.png"><meta property="article:published_time" content="2023-02-20T12:25:00.000Z"><meta property="article:modified_time" content="2023-03-10T08:02:13.000Z"><meta property="article:author" content="leon Yan"><meta property="article:tag" content="java"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://dawnchannel.tech/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://dawnchannel.tech/2023/02/20/JavaProblem/"},"headline":"Java问题收集","image":["http://dawnchannel.tech/img/og_image.png"],"datePublished":"2023-02-20T12:25:00.000Z","dateModified":"2023-03-10T08:02:13.000Z","author":{"@type":"Person","name":"leon Yan"},"publisher":{"@type":"Organization","name":"blog","logo":{"@type":"ImageObject","url":"http://dawnchannel.tech/images/avatar.png"}},"description":"StringJava 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?JEP 254： 紧凑字符串 (openjdk.org) 我们建议更改类的内部表示 从 UTF-16 数组到数组加上编码标志字段。 新类将存储编码为 ISO-8859-1&#x2F;Latin-1（每个字符一个字节），或 UTF-16（每个字符两个字节） 字符）"}</script><link rel="canonical" href="http://dawnchannel.tech/2023/02/20/JavaProblem/"><link rel="icon" href="/images/avatar.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer=""></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if (!$tabMenu) {
+            return;
+          }
+
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
+
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/avatar.png" alt="blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">首页</a><a class="navbar-item" href="/archives">分类</a><a class="navbar-item" href="/categories">归档</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item night" id="night-nav" title="Night Mode" href="javascript:;"><i class="fas fa-moon" id="night-icon"></i></a><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/leonyan18"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="目录" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-02-20T12:25:00.000Z" title="2023/2/20 20:25:00">2023-02-20</time>发表</span><span class="level-item"><time datetime="2023-03-10T08:02:13.000Z" title="2023/3/10 16:02:13">2023-03-10</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/java/">java</a></span><span class="level-item">10 分钟读完 (大约1427个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Java问题收集</h1><div class="content"><h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><h3 id="Java-9-为何要将-String-的底层实现由-char-改成了-byte"><a href="#Java-9-为何要将-String-的底层实现由-char-改成了-byte" class="headerlink" title="Java 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?"></a><strong>Java 9 为何要将 <code>String</code> 的底层实现由 <code>char[]</code> 改成了 <code>byte[]</code> ?</strong></h3><p><a target="_blank" rel="noopener" href="https://openjdk.org/jeps/254">JEP 254： 紧凑字符串 (openjdk.org)</a></p>
+<p>我们建议更改类的内部表示 从 UTF-16 数组到数组加上编码标志字段。 新类将存储编码为 ISO-8859-1/Latin-1（每个字符一个字节），或 UTF-16（每个字符两个字节） 字符）</p>
+<span id="more"></span>
+
+<h3 id="字符串拼接用“-”-还是-StringBuilder"><a href="#字符串拼接用“-”-还是-StringBuilder" class="headerlink" title="字符串拼接用“+” 还是 StringBuilder?"></a>字符串拼接用“+” 还是 StringBuilder?</h3><p>可以从字节码里看出</p>
+<p>字符串对象通过“+”的字符串拼接方式，实际上是通过 <code>StringBuilder</code> 调用 <code>append()</code> 方法实现的，拼接完成之后调用 <code>toString()</code> 得到一个 <code>String</code> 对象 。</p>
+<p>不过，在循环内使用“+”进行字符串的拼接的话，存在比较明显的缺陷：<strong>编译器不会创建单个 <code>StringBuilder</code> 以复用，会导致创建过多的 <code>StringBuilder</code> 对象</strong>。</p>
+<hr>
+<p>著作权归所有 原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/basis/java-basic-questions-02.html">https://javaguide.cn/java/basis/java-basic-questions-02.html</a></p>
+<h2 id="Java代理"><a href="#Java代理" class="headerlink" title="Java代理"></a>Java代理</h2><h3 id="反射优缺点"><a href="#反射优缺点" class="headerlink" title="反射优缺点"></a>反射优缺点</h3><p><strong>优点</strong> ： 可以让咱们的代码更加灵活、为各种框架提供开箱即用的功能提供了便利</p>
+<p><strong>缺点</strong> ：让我们在运行时有了分析操作类的能力，这同样也增加了安全问题。比如可以无视泛型参数的安全检查（泛型参数的安全检查发生在编译时）。另外，反射的性能也要稍差点，不过，对于框架来说实际是影响不大的。</p>
+<hr>
+<p>著作权归所有 原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/basis/reflection.html">https://javaguide.cn/java/basis/reflection.html</a></p>
+<h3 id="反射为什么慢"><a href="#反射为什么慢" class="headerlink" title="反射为什么慢"></a>反射为什么慢</h3><p>Reflection is slow for a few obvious reasons:</p>
+<ol>
+<li>The compiler can do no optimization whatsoever as it can have no real idea about what you are doing. This probably goes for the <code>JIT</code> as well</li>
+<li>Everything being invoked/created has to be <em>discovered</em> (i.e. classes looked up by name, methods looked at for matches etc)</li>
+<li>Arguments need to be dressed up via boxing/unboxing, packing into arrays, <code>Exceptions</code> wrapped in <code>InvocationTargetException</code>s and re-thrown etc.</li>
+<li>All the processing that <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1392351/java-reflection-why-is-it-so-bad/1392379#1392379"><em>Jon Skeet</em> mentions here</a>.</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1392351/java-reflection-why-is-it-so-slow">performance - Java Reflection: Why is it so slow? - Stack Overflow</a></p>
+<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p>需要手动实现一个代理类，实际应用中较少</p>
+<h3 id="JDK-动态代理和-CGLIB-动态代理对比"><a href="#JDK-动态代理和-CGLIB-动态代理对比" class="headerlink" title="JDK 动态代理和 CGLIB 动态代理对比"></a>JDK 动态代理和 CGLIB 动态代理对比</h3><ol>
+<li><strong>JDK 动态代理只能代理实现了接口的类或者直接代理接口，而 CGLIB 可以代理未实现任何接口的类。</strong> 另外， CGLIB 动态代理是通过生成一个被代理类的子类来拦截被代理类的方法调用，因此不能代理声明为 final 类型的类和方法。</li>
+<li>就二者的效率来说，大部分情况都是 JDK 动态代理更优秀，随着 JDK 版本的升级，这个优势更加明显。</li>
+</ol>
+<hr>
+<p>著作权归所有 原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/basis/proxy.html">https://javaguide.cn/java/basis/proxy.html</a></p>
+<h3 id="静态代理和动态代理的对比"><a href="#静态代理和动态代理的对比" class="headerlink" title="静态代理和动态代理的对比"></a>静态代理和动态代理的对比</h3><ol>
+<li><strong>灵活性</strong> ：动态代理更加灵活，不需要必须实现接口，可以直接代理实现类，并且可以不需要针对每个目标类都创建一个代理类。另外，静态代理中，接口一旦新增加方法，目标对象和代理对象都要进行修改，这是非常麻烦的！</li>
+<li><strong>JVM 层面</strong> ：静态代理在编译时就将接口、实现类、代理类这些都变成了一个个实际的 class 文件。而动态代理是在运行时动态生成类字节码，并加载到 JVM 中的。</li>
+</ol>
+<hr>
+<p>著作权归所有 原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/basis/proxy.html">https://javaguide.cn/java/basis/proxy.html</a></p>
+<h2 id="BigDecimal"><a href="#BigDecimal" class="headerlink" title="BigDecimal"></a>BigDecimal</h2><p><strong>浮点数之间的等值判断，基本数据类型不能用 == 来比较，包装数据类型不能用 equals 来判断。</strong></p>
+<p>我们在使用 <code>BigDecimal</code> 时，为了防止精度丢失，推荐使用它的<code>BigDecimal(String val)</code>构造方法或者 <code>BigDecimal.valueOf(double val)</code> 静态方法来创建对象。</p>
+<p>大小比较使用 a.compareTo(b)， <code>equals()</code> 方法不仅仅会比较值的大小（value）还会比较精度（scale），而 <code>compareTo()</code> 方法比较的时候会忽略精度。</p>
+<hr>
+<p>著作权归所有 原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/basis/bigdecimal.html">https://javaguide.cn/java/basis/bigdecimal.html</a></p>
+<h2 id="Unsafe"><a href="#Unsafe" class="headerlink" title="Unsafe"></a>Unsafe</h2><p><code>Unsafe</code> 是位于 <code>sun.misc</code> 包下的一个类，主要提供一些用于执行低级别、不安全操作的方法，如直接访问系统内存资源、自主管理内存资源等，这些方法在提升 Java 运行效率、增强 Java 语言底层资源操作能力方面起到了很大的作用</p>
+<p>主要功能分类</p>
+<ol>
+<li>内存操作</li>
+<li>内存屏障</li>
+<li>对象操作</li>
+<li>数据操作</li>
+<li>CAS 操作</li>
+<li>线程调度</li>
+<li>Class 操作</li>
+<li>系统信息</li>
+</ol>
+<hr>
+<p>著作权归所有 原文链接：<a target="_blank" rel="noopener" href="https://javaguide.cn/java/basis/unsafe.html">https://javaguide.cn/java/basis/unsafe.html</a></p>
+<h3 id="为啥要使用堆外内存。通常因为："><a href="#为啥要使用堆外内存。通常因为：" class="headerlink" title="为啥要使用堆外内存。通常因为："></a><strong>为啥要使用堆外内存。通常因为：</strong></h3><ul>
+<li>在进程间可以共享，减少虚拟机间的复制</li>
+<li>对垃圾回收停顿的改善：如果应用某些长期存活并大量存在的对象，经常会出发YGC或者FullGC，可以考虑把这些对象放到堆外。过大的堆会影响Java应用的性能。如果使用堆外内存的话，堆外内存是直接受操作系统管理( 而不是虚拟机 )。这样做的结果就是能保持一个较小的堆内内存，以减少垃圾收集对应用的影响。</li>
+<li>在某些场景下可以提升程序I/O操纵的性能。少去了将数据从堆内内存拷贝到堆外内存的步骤。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Java问题收集</p><p><a href="http://dawnchannel.tech/2023/02/20/JavaProblem/">http://dawnchannel.tech/2023/02/20/JavaProblem/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>leon Yan</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-02-20</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2023-03-10</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i>&nbsp;<a class="link-muted" rel="tag" href="/tags/java/">java </a></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/images/alipay_qrcode.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/images/wechat_qrcode.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2023/01/06/BM75/"><span class="level-item">BM75 编辑距离(一)</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "01929fdbd6133285bfea2356661895d7",
+            repo: "blog",
+            owner: "leonyan18",
+            clientID: "4bd38af00fcd8ccc320a",
+            clientSecret: "d17b52761b48076a3fbafb2cb4f90f9a5ea969be",
+            admin: ["leonyan18"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 10,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="颜晨曦"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">颜晨曦</p><p class="is-size-6 is-block">研究生</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>浙江 台州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">8</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/leonyan18" target="_blank" rel="noopener"><i class="fab fa-github"></i>&nbsp;&nbsp;关注我</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">目录</h3><ul class="menu-list"><li><a class="level is-mobile" href="#String"><span class="level-left"><span class="level-item">1</span><span class="level-item">String</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#Java-9-为何要将-String-的底层实现由-char-改成了-byte"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">Java 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?</span></span></a></li><li><a class="level is-mobile" href="#字符串拼接用“-”-还是-StringBuilder"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">字符串拼接用“+” 还是 StringBuilder?</span></span></a></li></ul></li><li><a class="level is-mobile" href="#Java代理"><span class="level-left"><span class="level-item">2</span><span class="level-item">Java代理</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#反射优缺点"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">反射优缺点</span></span></a></li><li><a class="level is-mobile" href="#反射为什么慢"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">反射为什么慢</span></span></a></li><li><a class="level is-mobile" href="#静态代理"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">静态代理</span></span></a></li><li><a class="level is-mobile" href="#JDK-动态代理和-CGLIB-动态代理对比"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">JDK 动态代理和 CGLIB 动态代理对比</span></span></a></li><li><a class="level is-mobile" href="#静态代理和动态代理的对比"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">静态代理和动态代理的对比</span></span></a></li></ul></li><li><a class="level is-mobile" href="#BigDecimal"><span class="level-left"><span class="level-item">3</span><span class="level-item">BigDecimal</span></span></a></li><li><a class="level is-mobile" href="#Unsafe"><span class="level-left"><span class="level-item">4</span><span class="level-item">Unsafe</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#为啥要使用堆外内存。通常因为："><span class="level-left"><span class="level-item">4.1</span><span class="level-item">为啥要使用堆外内存。通常因为：</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer=""></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/images/avatar.png" alt="blog" height="28"></a><p class="is-size-7"><span>© 2023 leon Yan</span>&nbsp;&nbsp;Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>&nbsp;&amp;&nbsp;<a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span><br><a target="_blank" href="https://beian.miit.gov.cn"><img style="width:16px;height:16px;" src="http://www.beian.gov.cn/img/new/gongan.png"><span>浙ICP备2022034733号-1</span></a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer=""></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer=""></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer=""></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer=""></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer=""></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer=""></script><script src="/js/night.js" defer=""></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer=""></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
