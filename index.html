@@ -27,12 +27,88 @@
       switchTab();
       window.addEventListener('hashchange', switchTab, false);
   })();
-  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/avatar.png" alt="blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">首页</a><a class="navbar-item" href="/archives">分类</a><a class="navbar-item" href="/categories">归档</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item night" id="night-nav" title="Night Mode" href="javascript:;"><i class="fas fa-moon" id="night-icon"></i></a><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/leonyan18"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-03-30T07:25:00.000Z" title="2023/3/30 15:25:00">2023-03-30</time>发表</span><span class="level-item"><time datetime="2023-03-30T09:02:10.245Z" title="2023/3/30 17:02:10">2023-03-30</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/java/">java</a></span><span class="level-item">2 分钟读完 (大约258个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2023/03/30/JavaCollection/">Java集合</a></h1><div class="content"><h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ol>
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.2"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/images/avatar.png" alt="blog" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item is-active" href="/">首页</a><a class="navbar-item" href="/archives">分类</a><a class="navbar-item" href="/categories">归档</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item night" id="night-nav" title="Night Mode" href="javascript:;"><i class="fas fa-moon" id="night-icon"></i></a><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/leonyan18"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-6-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-03-30T07:25:00.000Z" title="2023/3/30 15:25:00">2023-03-30</time>发表</span><span class="level-item"><time datetime="2023-04-01T13:55:27.135Z" title="2023/4/1 21:55:27">2023-04-01</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/java/">java</a></span><span class="level-item">3 分钟读完 (大约411个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2023/03/30/JavaCollection/">Java集合</a></h1><div class="content"><h2 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h2><h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><ol>
 <li>校验初始容量</li>
 <li>如果是无参构造，那么还是赋值一个空的数组，但是插入的时候会辨别;反之则构造一个空的数组DEFAULTCAPACITY_EMPTY_ELEMENTDATA，但是下次扩容会取最小扩容量与默认初始化长度（一般为10）进行比较。</li>
 </ol>
-<h2 id="扩容过程"><a href="#扩容过程" class="headerlink" title="扩容过程"></a>扩容过程</h2><h3 id="add函数"><a href="#add函数" class="headerlink" title="add函数"></a>add函数</h3><p>校验大小获取最少需要长度通常是插入数量+当前长度，</p>
-<h3 id="grow函数"><a href="#grow函数" class="headerlink" title="grow函数"></a>grow函数</h3><p>如果不够就进行扩容，并确定扩容大小，每次扩容变成原来的1.5倍，0.5倍由无符号右移一位得到，新长度有最少需要长度与原来长度的1.5倍的最大值得到，但是不超过SOFT_MAX_ARRAY_LENGTH，该值为Int的最大值-8，是由于部分java虚拟机需要存放object header会导致堆栈溢出，所以选择了个略小于最大值的值。</p></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i>&nbsp;<a class="link-muted" rel="tag" href="/tags/java/">java </a></div><a class="article-more button is-small is-size-7" href="/2023/03/30/JavaCollection/#more"><i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;阅读更多</a></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-02-20T12:25:00.000Z" title="2023/2/20 20:25:00">2023-02-20</time>发表</span><span class="level-item"><time datetime="2023-03-28T02:33:10.349Z" title="2023/3/28 10:33:10">2023-03-28</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/java/">java</a></span><span class="level-item">11 分钟读完 (大约1660个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2023/02/20/JavaProblem/">Java问题收集</a></h1><div class="content"><h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><h3 id="Java-9-为何要将-String-的底层实现由-char-改成了-byte"><a href="#Java-9-为何要将-String-的底层实现由-char-改成了-byte" class="headerlink" title="Java 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?"></a><strong>Java 9 为何要将 <code>String</code> 的底层实现由 <code>char[]</code> 改成了 <code>byte[]</code> ?</strong></h3><p><a target="_blank" rel="noopener" href="https://openjdk.org/jeps/254">JEP 254： 紧凑字符串 (openjdk.org)</a></p>
+<h3 id="扩容过程"><a href="#扩容过程" class="headerlink" title="扩容过程"></a>扩容过程</h3><h4 id="add函数"><a href="#add函数" class="headerlink" title="add函数"></a>add函数</h4><p>校验大小获取最少需要长度通常是插入数量+当前长度，</p>
+<h4 id="grow函数"><a href="#grow函数" class="headerlink" title="grow函数"></a>grow函数</h4><p>如果不够就进行扩容，并确定扩容大小，每次扩容变成原来的1.5倍，0.5倍由无符号右移一位得到，新长度有最少需要长度与原来长度的1.5倍的最大值得到，但是不超过SOFT_MAX_ARRAY_LENGTH，该值为Int的最大值-8，是由于部分java虚拟机需要存放object header会导致堆栈溢出，Java中的对象头信息（数组长度）需要占用8个字节的空间，所以选择了个略小于最大值的值。</p></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i>&nbsp;<a class="link-muted" rel="tag" href="/tags/java/">java </a></div><a class="article-more button is-small is-size-7" href="/2023/03/30/JavaCollection/#more"><i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;阅读更多</a></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-02-20T12:25:00.000Z" title="2023/2/20 20:25:00">2023-02-20</time>发表</span><span class="level-item"><time datetime="2023-04-01T13:55:24.601Z" title="2023/4/1 21:55:24">2023-04-01</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/java/">java</a></span><span class="level-item">13 分钟读完 (大约1930个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2023/02/20/JavaProblem/">Java问题收集</a></h1><div class="content"><h2 id="理解原码、反码、补码、移码"><a href="#理解原码、反码、补码、移码" class="headerlink" title="理解原码、反码、补码、移码"></a>理解原码、反码、补码、移码</h2><ul>
+<li><p>符号位：0位正数，1为负数</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%8E%9F%E7%A0%81&amp;spm=1001.2101.3001.7020">原码</a>不能进行运算</p>
+</li>
+<li><p>正数的原码和<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%8F%8D%E7%A0%81&amp;spm=1001.2101.3001.7020">反码</a>一样，负数的反码是在原码的基础上，符号位不变，其余取反</p>
+</li>
+<li><p>正数的补码和反码一样，负数的补码是在反码的基础上进行＋1操作</p>
+</li>
+<li><p>移码是在补码的基础上，把符号位取反</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>-1</th>
+<th>1+（-1）</th>
+<th>结果</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原码</td>
+<td>0000 0001</td>
+<td>1000 0001</td>
+<td>1000 0010</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>反码</td>
+<td>0000 0001</td>
+<td>1111 1110</td>
+<td>1111 1111</td>
+<td>-0</td>
+</tr>
+<tr>
+<td>补码</td>
+<td>0000 0001</td>
+<td>1111 1111</td>
+<td>0000 0000</td>
+<td>+0</td>
+</tr>
+<tr>
+<td>移码</td>
+<td>1000 0001</td>
+<td>0111 1111</td>
+<td>1000 0000</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>取值范围</p>
+<table>
+<thead>
+<tr>
+<th>整数</th>
+<th>n=8</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原码</td>
+<td>-(2^(n-1)-1)~2^(n-1)-1</td>
+<td>-127~127</td>
+</tr>
+<tr>
+<td>反码</td>
+<td>-(2^(n-1)-1)~2^(n-1)-1</td>
+<td>-127~127</td>
+</tr>
+<tr>
+<td>补码</td>
+<td>-2^(n-1)~2^(n-1)-1</td>
+<td>-128~127</td>
+</tr>
+</tbody></table>
+<h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><h3 id="Java-9-为何要将-String-的底层实现由-char-改成了-byte"><a href="#Java-9-为何要将-String-的底层实现由-char-改成了-byte" class="headerlink" title="Java 9 为何要将 String 的底层实现由 char[] 改成了 byte[] ?"></a><strong>Java 9 为何要将 <code>String</code> 的底层实现由 <code>char[]</code> 改成了 <code>byte[]</code> ?</strong></h3><p><a target="_blank" rel="noopener" href="https://openjdk.org/jeps/254">JEP 254： 紧凑字符串 (openjdk.org)</a></p>
 <p>我们建议更改类的内部表示 从 UTF-16 数组到数组加上编码标志字段。 新类将存储编码为 ISO-8859-1/Latin-1（每个字符一个字节），或 UTF-16（每个字符两个字节） 字符）</p></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i>&nbsp;<a class="link-muted" rel="tag" href="/tags/java/">java </a></div><a class="article-more button is-small is-size-7" href="/2023/02/20/JavaProblem/#more"><i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;阅读更多</a></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-01-06T14:36:00.000Z" title="2023/1/6 22:36:00">2023-01-06</time>发表</span><span class="level-item"><time datetime="2023-03-20T11:34:05.795Z" title="2023/3/20 19:34:05">2023-03-20</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Algorithm/">Algorithm</a></span><span class="level-item">5 分钟读完 (大约720个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2023/01/06/BM75/">BM75 编辑距离(一)</a></h1><div class="content"><h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/6a1483b5be1547b1acd7940f867be0da">编辑距离(一)_牛客题霸_牛客网 (nowcoder.com)</a></p>
 <p><img src="/images/image-20230106223749119.png" alt="image-20230106223749119"></p></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i>&nbsp;<a class="link-muted" rel="tag" href="/tags/Algorithm/">Algorithm, </a><a class="link-muted" rel="tag" href="/tags/DynamicProgramming/">DynamicProgramming </a></div><a class="article-more button is-small is-size-7" href="/2023/01/06/BM75/#more"><i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;阅读更多</a></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2023-01-01T15:09:00.000Z" title="2023/1/1 23:09:00">2023-01-01</time>发表</span><span class="level-item"><time datetime="2023-03-20T11:33:53.933Z" title="2023/3/20 19:33:53">2023-03-20</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Algorithm/">Algorithm</a></span><span class="level-item">3 分钟读完 (大约418个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2023/01/01/BM20/">数组中的逆序对</a></h1><div class="content"><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/96bd6684e04a44eb80e6a68efc0ec6c5">数组中的逆序对_牛客题霸_牛客网 (nowcoder.com)</a></p>
 <h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><p><img src="/images/image-20230101231152175.png" alt="image-20230101231152175"></p></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i>&nbsp;<a class="link-muted" rel="tag" href="/tags/Algorithm/">Algorithm, </a><a class="link-muted" rel="tag" href="/tags/MergeSort/">MergeSort </a></div><a class="article-more button is-small is-size-7" href="/2023/01/01/BM20/#more"><i class="fas fa-book-reader has-text-grey"></i>&nbsp;&nbsp;阅读更多</a></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time datetime="2022-12-30T05:31:00.000Z" title="2022/12/30 13:31:00">2022-12-30</time>发表</span><span class="level-item"><time datetime="2023-03-20T11:33:51.553Z" title="2023/3/20 19:33:51">2023-03-20</time>更新</span><span class="level-item"><a class="link-muted" href="/categories/Algorithm/">Algorithm</a></span><span class="level-item">4 分钟读完 (大约550个字)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2022/12/30/BM95/">BM95 分糖果问题</a></h1><div class="content"><h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>链接：<a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/76039109dd0b47e994c08d8319faa352?tpId=295&amp;tqId=1008104&amp;ru=/exam/oj&amp;qru=/ta/format-top101/question-ranking&amp;sourceUrl=/exam/oj">分糖果问题_牛客题霸_牛客网 (nowcoder.com)</a></p>
